@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-# WS server example
-
 import asyncio
 import websockets
 import random
