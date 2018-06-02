@@ -15,7 +15,6 @@ async def plug():
 	step = 0
 	battery = 123
 	money = 500.0
-	totalConsumed = 0
 	print(battery)
 	async with websockets.connect('ws://localhost:8765') as websocket:
 		while step!=-1:
@@ -60,7 +59,6 @@ async def plug():
 							print(f"> {resp} kWh consumed")
 							await websocket.send(f"Received")
 							battery += int(resp)
-							totalConsumed += int(resp)
 							resp = await websocket.recv()
 						step += 1
 				elif step==4:
@@ -86,8 +84,6 @@ async def plug():
 					print(f"> {resp} kWh consumed")
 					await websocket.send(f"Received")
 					battery += int(resp)
-					totalConsumed += int(resp)
-					print(totalConsumed)
 					resp = await websocket.recv()
 					print(f"> {resp}")
 					await websocket.send("Stop transaction")
