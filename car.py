@@ -15,7 +15,6 @@ async def plug():
 	step = 0
 	battery = 123
 	money = 500.0
-	print(battery)
 	async with websockets.connect('ws://localhost:8765') as websocket:
 		while step!=-1:
 			if quit==False:
@@ -34,6 +33,7 @@ async def plug():
 						step += 1
 				elif step==2:
 					resp = await websocket.recv()
+					print(f"--------------------------------------------")
 					print(f"< {resp}")
 
 					if resp=='Authorized':
@@ -52,6 +52,7 @@ async def plug():
 						step = 5
 				elif step==3:
 					resp = await websocket.recv()
+					print(f"--------------------------------------------")
 					print(f"< {resp}")
 					if resp=='Charging begins':
 						resp = await websocket.recv()
@@ -73,7 +74,9 @@ async def plug():
 					await websocket.send("Ended")
 					step += 1
 				elif step==5:
+					print(f"--------------------------------------------")
 					print("Unplug required")
+					print(f"--------------------------------------------")
 					step += 1
 				elif step==-1:
 					exit(0)
@@ -85,7 +88,8 @@ async def plug():
 					await websocket.send(f"Received")
 					battery += int(resp)
 					resp = await websocket.recv()
-					print(f"> {resp}")
+					print(f"--------------------------------------------")
+					print(f"> Charging stopped")
 					await websocket.send("Stop transaction")
 					bill = await websocket.recv()
 					print(f"> {bill} $ to pay")

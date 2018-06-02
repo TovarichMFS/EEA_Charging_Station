@@ -11,6 +11,9 @@ async def handle(websocket, path):
     while True:
 	    call = await websocket.recv()
 	    if call=='Plugged':
+		    print(f"--------------------------------------------")
+		    print(f"Station occupied")
+		    print(f"--------------------------------------------")
 		    resp = f"Connected"
 		    await websocket.send(resp)
 		    print(f"> {resp}")
@@ -36,6 +39,7 @@ async def handle(websocket, path):
 		    resp = f"{powerAmount}"
 		    await websocket.send(resp)
 		    print(f"> {resp} kWh allowed")
+		    print(f"--------------------------------------------")
 		    resp = f"Charging begins"
 		    await websocket.send(resp)
 		    print(f"> {resp}")
@@ -64,9 +68,11 @@ async def handle(websocket, path):
 
 		    if call!='Received':
 			    await websocket.send("Stopped")
+			    print(f"--------------------------------------------")
 			    print(f"> Charging stopped")
 		    else:
 			    await websocket.send("Complete")
+			    print(f"--------------------------------------------")
 			    print(f"> Charging complete")
 			    bill = total*price
 			    resp = f"{bill}"
@@ -85,14 +91,22 @@ async def handle(websocket, path):
 		    call = await websocket.recv()
 		    print(f"< {call}")
 		    print('< Unplugged')
+		    print(f"--------------------------------------------")
+		    print(f"Station available, waiting for a customer...")
+		    print(f"--------------------------------------------")
 		    break
 	    elif call=='Ended':
 		    print("Waiting for unplug")
 	    elif call=='Unplugged':
 		    print('< Unplugged')
+		    print(f"--------------------------------------------")
+		    print(f"Station available, waiting for a customer...")
+		    print(f"--------------------------------------------")
 		    break
 
 start_server = websockets.serve(handle, 'localhost', 8765)
-
+print(f"--------------------------------------------")
+print(f"Waiting for a customer...")
+print(f"--------------------------------------------")
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
