@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package StatusNotification;
+
+message StatusNotificationRequest {
+  required string timestamp = 1;
+
+  enum ConnectorStatusEnumType {
+    Available = 0;
+    Occupied = 1;
+    Reserved = 2;
+    Unavailable = 3;
+    Faulted = 4;
+  }
+
+  required ConnectorStatusEnumType connectorStatus = 2;
+  required int32 evseId = 3;
+  required int32 connectorId = 4;
+}
+
+message StatusNotificationResponse {
+
+}

@@ -1,0 +1,117 @@
+syntax = "proto2";
+
+package Authorize;
+
+message AuthorizeRequest {
+    optional int32 evseId = 1;
+
+    message IdTokenType {
+        enum IdTokenEnumType {
+            Central = 0;
+            eMAID = 1;
+            ISO14443 = 2;
+            KeyCode = 3;
+            Local = 4;
+            NoAuthorization = 5;
+            ISO15693 = 6;
+        }
+
+        message AdditionalInfoType {
+            required string additionalIdToken = 1;
+            required string type = 2;
+        }
+
+        required string idToken = 1;
+        required IdTokenEnumType type = 2;
+        required AdditionalInfoType additionalInfo = 3;
+    }
+
+    required IdTokenType idToken = 2;
+
+    message OCSPRequestDataType {
+        enum HashAlgorithmEnumType {
+            SHA256 = 0;
+            SHA384 = 1;
+            SHA512 = 2;
+        }
+
+        required HashAlgorithmEnumType hashAlgorithm = 1;
+        required string issuerNameHash = 2;
+        required string issuerKeyHash = 3;
+        required string serialNumber = 4;
+        optional string responderURL = 5;
+    }
+
+    optional OCSPRequestDataType _15118CertificateHashData = 3;
+}
+
+message AuthorizeResponse {
+    enum CertificateStatusEnumType {
+        Accepted = 0;
+        SignatureError = 1;
+        CertificateExpired = 2;
+        CertificateRevoked = 3;
+        NoCertificateAvailable = 4;
+        CertChainError = 5;
+        ContractCancelled = 6;
+    }
+
+    optional CertificateStatusEnumType certificateStatus = 1;
+    optional int32 evseId = 2;
+
+    message IdTokenInfoType {
+        enum AuthorizationStatusEnumType {
+            Accepted = 0;
+            Blocked = 1;
+            ConcurrentTx = 2;
+            Expired = 3;
+            Invalid = 4;
+            NoCredit = 5;
+            NotAllowedTypeEVSE = 6;
+            NotAtThisLocation = 7;
+            NotAtThisTime = 8;
+            Unknown = 9;
+        }
+
+        required AuthorizationStatusEnumType status = 1;
+        optional string cacheExpiryDateTime = 2;
+        optional int32 chargingPriority = 3;
+        optional string language1 = 4;
+        optional string language2 = 5;
+
+        message GroupIdTokenType {
+            required string idToken = 1;
+
+            enum IdTokenEnumType {
+                Central = 0;
+                eMAID = 1;
+                ISO14443 = 2;
+                KeyCode = 3;
+                Local = 4;
+                NoAuthorization = 5;
+                ISO15693 = 6;
+            }
+
+            required IdTokenEnumType type = 2;
+        }
+
+        optional GroupIdTokenType groupIdToken = 6;
+
+        message MessageContentType {
+            enum MessageFormatEnumType {
+                ASCII = 0;
+                HTML = 1;
+                URI = 2;
+                UTF8 = 3;
+            }
+
+            required MessageFormatEnumType format = 1;
+            optional string language = 2;
+            required string content = 3;
+        }
+
+        optional MessageContentType personalMessage = 7;
+    }
+
+    required IdTokenInfoType idTokenInfo = 3;
+}

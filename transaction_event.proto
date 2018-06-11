@@ -1,0 +1,298 @@
+syntax = "proto2";
+
+package TransactionEvent;
+
+message TransactionEventRequest {
+    enum TransactionEventEnumType {
+        Ended = 0;
+        Started = 1;
+        Updated = 2;
+    }
+
+    required TransactionEventEnumType eventType = 1;
+    required string timestamp = 2;
+
+    enum TriggerReasonEnumType {
+        Authorized = 0;
+        CablePluggedIn = 1;
+        ChargingRateChanged = 2;
+        ChargingStateChanged = 3;
+        Deauthorized = 4;
+        EnergyLimitReached = 5;
+        EVCommunicationLost = 6;
+        EVConnectTimeout = 7;
+        MeterValueClock = 8;
+        MeterValuePeriodic = 9;
+        TimeLimitReached = 10;
+        Trigger = 11;
+        UnlockCommand = 12;
+        StopAuthorized = 13;
+        EVDeparted = 14;
+        EVDetected = 15;
+        RemoteStop = 16;
+        RemoteStart = 17;
+    }
+
+    required TriggerReasonEnumType triggerReason = 3;
+    required int32 seqNo = 4;
+    optional bool offline = 5;
+    optional int32 numberOfPhasesUsed = 6;
+    optional string cableMaxCurrent = 7;
+    optional int32 reservationId = 8;
+
+    message TransactionType {
+        enum ChargingStateEnumType {
+            Charging = 0;
+            EVDetected = 1;
+            SuspendedEV = 2;
+            SuspendedEVSE = 3;
+        }
+
+        enum ReasonEnumType {
+            DeAuthorized = 0;
+            EmergencyStop = 1;
+            EnergyLimitReached = 2;
+            EVDisconnected = 3;
+            GroundFault = 4;
+            ImmediateReset = 5;
+            Local = 6;
+            LocalOutOfCredit = 7;
+            MasterPass = 8;
+            Other = 9;
+            OvercurrentFault = 10;
+            PowerLoss = 11;
+            PowerQuality = 12;
+            Reboot = 13;
+            Remote = 14;
+            SOCLimitReached = 15;
+            StoppedByEV = 16;
+            TimeLimitReached = 17;
+            Timeout = 18;
+            UnlockCommand = 19;
+        }
+
+        required int32 id = 1;
+        optional ChargingStateEnumType chargingState = 2;
+        optional int32 timeSpentCharging = 3;
+        optional ReasonEnumType stoppedReason = 4;
+        optional int32 remoteStartId = 5;
+    }
+
+    required TransactionType transactionData = 9;
+
+    message IdTokenType {
+        enum IdTokenEnumType {
+            Central = 0;
+            eMAID = 1;
+            ISO14443 = 2;
+            KeyCode = 3;
+            Local = 4;
+            NoAuthorization = 5;
+            ISO15693 = 6;
+        }
+
+        message AdditionalInfoType {
+            required string additionalIdToken = 1;
+            required string type = 2;
+        }
+
+        required string idToken = 1;
+        required IdTokenEnumType type = 2;
+        required AdditionalInfoType additionalInfo = 3;
+    }
+
+    optional IdTokenType idToken = 10;
+
+    message EVSEType {
+        required int32 id = 1;
+        optional int32 connectorId = 2;
+    }
+
+    optional EVSEType evse = 11;
+
+    message MeterValueType {
+        required string timestamp = 1;
+
+        message SampledValueType {
+            required string value = 1;
+
+            enum ReadingContextEnumType {
+                InterruptionBegin = 0;
+                InterruptionEnd = 1;
+                Other = 2;
+                SampleClock = 3;
+                SamplePeriodic = 4;
+                TransactionBegin = 5;
+                TransactionEnd = 6;
+                Trigger = 7;
+            }
+
+            optional ReadingContextEnumType context = 2;
+
+            enum MeasurandEnumType {
+                CurrentExport = 0;
+                CurrentImport = 1;
+                CurrentOffered = 2;
+                EnergyActiveExportRegister = 3;
+                EnergyActiveImportRegister = 4;
+                EnergyReactiveExportRegister = 5;
+                EnergyReactiveImportRegister = 6;
+                EnergyActiveExportInterval = 7;
+                EnergyActiveImportInterval = 8;
+                EnergyActiveNet = 9;
+                EnergyReactiveExportInterval = 10;
+                EnergyReactiveImportInterval = 11;
+                EnergyReactiveNet = 12;
+                EnergyApparentNet = 13;
+                EnergyApparentImport = 14;
+                EnergyApparentExport = 15;
+                Frequency = 16;
+                PowerActiveExport = 17;
+                PowerActiveImport = 18;
+                PowerFactor = 19;
+                PowerOffered = 20;
+                PowerReactiveExport = 21;
+                PowerReactiveImport = 22;
+                SoC = 23;
+                Voltage = 24;
+            }
+
+            optional MeasurandEnumType measurand = 3;
+
+            enum PhaseEnumType {
+                L1 = 0;
+                L2 = 1;
+                L3 = 2;
+                N = 3;
+                L1N = 4;
+                L2N = 5;
+                L3N = 6;
+                L1L2 = 7;
+                L2L3 = 8;
+                L3L1 = 9;
+            }
+            optional PhaseEnumType phase = 4;
+
+            enum LocationEnumType {
+                Body = 0;
+                Cable = 1;
+                EV = 2;
+                Inlet = 3;
+                Outlet = 4;
+            }
+
+            optional LocationEnumType location = 5;
+
+            message SignedMeterValueType {
+                required string meterValueSignature = 1;
+
+                enum SignatureMethodEnumType {
+                    ECDSAP256SHA256 = 0;
+                    ECDSAP384SHA384 = 1;
+                    ECDSA192SHA256 = 2;
+                }
+
+                required SignatureMethodEnumType signatureMethod = 2;
+
+                enum EncodingMethodEnumType {
+                    Other = 0;
+                    DLMSMessage = 1;
+                    COSEMProtectedData = 2;
+                    EDL = 3;
+                }
+
+                required EncodingMethodEnumType encodingMethod = 3;
+                required string encodedMeterValue = 4;
+            }
+
+            optional SignedMeterValueType signedMeterValue = 6;
+
+            message UnitOfMeasureType {
+                optional string unit = 1;
+                optional int32 multiplier = 2;
+            }
+
+            optional UnitOfMeasureType unitOfMeasure = 7;
+        }
+
+        required SampledValueType sampledValue = 2;
+    }
+
+    optional MeterValueType meterValue = 12;
+}
+
+message TransactionEventResponse {
+    optional string totalCost = 1;
+    optional int32 chargingPriority = 2;
+
+    message IdTokenInfoType {
+        enum AuthorizationStatusEnumType {
+            Accepted = 0;
+            Blocked = 1;
+            ConcurrentTx = 2;
+            Expired = 3;
+            Invalid = 4;
+            NoCredit = 5;
+            NotAllowedTypeEVSE = 6;
+            NotAtThisLocation = 7;
+            NotAtThisTime = 8;
+            Unknown = 9;
+        }
+
+        required AuthorizationStatusEnumType status = 1;
+        optional string cacheExpiryDateTime = 2;
+        optional int32 chargingPriority = 3;
+        optional string language1 = 4;
+        optional string language2 = 5;
+
+        message GroupIdTokenType {
+            required string idToken = 1;
+
+            enum IdTokenEnumType {
+                Central = 0;
+                eMAID = 1;
+                ISO14443 = 2;
+                KeyCode = 3;
+                Local = 4;
+                NoAuthorization = 5;
+                ISO15693 = 6;
+            }
+
+            required IdTokenEnumType type = 2;
+        }
+
+        optional GroupIdTokenType groupIdToken = 6;
+
+        message MessageContentType {
+            enum MessageFormatEnumType {
+                ASCII = 0;
+                HTML = 1;
+                URI = 2;
+                UTF8 = 3;
+            }
+
+            required MessageFormatEnumType format = 1;
+            optional string language = 2;
+            required string content = 3;
+        }
+
+        optional MessageContentType personalMessage = 7;
+    }
+
+    optional IdTokenInfoType idTokenInfo = 3;
+
+    message MessageContentType {
+        enum MessageFormatEnumType {
+            ASCII = 0;
+            HTML = 1;
+            URI = 2;
+            UTF8 = 3;
+        }
+
+        required MessageFormatEnumType format = 1;
+        optional string language = 2;
+        required string content = 3;
+    }
+
+    optional MessageContentType updatedPersonalMessage = 4;
+}

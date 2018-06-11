@@ -39,7 +39,7 @@ async def sendCredentials(websocket):
 	#Warn the station that the credentials will be sent
 	await websocket.send(f"ID")
 	#Waits for the user to enter an ID
-	id = input("Enter your ID:")
+	id = input("Enter your ID: ")
 	await websocket.send(f"{id}")
 	print(f"> ID sent")
 	resp = await websocket.recv()

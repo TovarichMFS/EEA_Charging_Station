@@ -4,6 +4,7 @@ import asyncio
 import websockets
 import random
 import time
+import datetime
 
 """
 This program simulates how a charging station can handle connections
@@ -20,6 +21,10 @@ async def connect(websocket):
     print(f"Station occupied")
     print(f"--------------------------------------------")
     resp = f"Connected"
+    async with websockets.connect('ws://localhost:8865') as websocket2:
+        await websocket2.send("Hey")
+        res = await websocket2.recv()
+        print(res)
     await websocket.send(resp)
     print(f"> {resp}")
 
@@ -154,3 +159,15 @@ print(f"--------------------------------------------")
 asyncio.get_event_loop().run_until_complete(start_server)
 #Asks the server to be an infinite loop
 asyncio.get_event_loop().run_forever()
+
+def getTime():
+	utcTime = datetime.datetime.utcnow()
+	localTime = datetime.datetime.now()
+
+	formatTime = '{:d}'.format(localTime.year) + '-' + '{:02d}'.format(localTime.month) + '-' + '{:02d}'.format(localTime.day) + 'T' + \
+				 '{:02d}'.format(localTime.hour) + ':' + '{:02d}'.format(localTime.minute) + ':' + '{:02d}'.format(localTime.second) +\
+				 str(localTime.astimezone())[26:]
+
+	return formatTime
+
+# print(getTime())
