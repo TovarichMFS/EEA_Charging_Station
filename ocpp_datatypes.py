@@ -17,10 +17,55 @@ class IdTokenType:
         self.type = type
         self.additionalInfo = additionalInfo
 
+class GroupIdTokenType:
+    def __init__(self, idToken: str, type: IdTokenEnumType):
+        self.idToken = idToken
+        self.type = type
+
+class MessageContentType:
+    def __init__(self, format: MessageFormatEnumType, language: str = None, content: str = None): # content is required
+        self.format = format
+        self.language = language
+        self.content = content
+
+class IdTokenInfoType:
+    def __init__(
+            self,
+            status: AuthorizationStatusEnumType,
+            cacheExpiryDateTime: str = None,
+            chargingPriority: int = None,
+            language1: str = None,
+            language2: str = None,
+            groupIdToken: GroupIdTokenType = None,
+            personalMessage: MessageContentType = None
+    ):
+        self.status = status
+        self.cacheExpiryDateTime = cacheExpiryDateTime
+        self.chargingPriority = chargingPriority
+        self.language1 = language1
+        self.language2 = language2
+        self.groupIdToken = groupIdToken
+        self.personalMessage = personalMessage
+
 class UnitOfMeasureType:
     def __init__(self, unit: str = None, multiplier: int = None):
         self.unit = unit
         self.multiplier = multiplier
+
+class OCSPRequestDataType:
+    def __init__(
+            self,
+            hashAlgorithm: HashAlgorithmEnumType,
+            issuerNameHash: str,
+            issuerKeyHash: str,
+            serialNumber: str,
+            responderURL: str = None
+    ):
+        self.hashAlgorithm = hashAlgorithm
+        self.issuerNameHash = issuerNameHash
+        self.issuerKeyHash = issuerKeyHash
+        self.serialNumber = serialNumber
+        self.responderURL = responderURL
 
 class SignedMeterValueType:
     def __init__(

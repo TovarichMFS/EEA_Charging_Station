@@ -41,12 +41,17 @@ message TransactionEventRequest {
     optional int32 reservationId = 8;
 
     message TransactionType {
+        required string id = 1;
+
         enum ChargingStateEnumType {
             Charging = 0;
             EVDetected = 1;
             SuspendedEV = 2;
             SuspendedEVSE = 3;
         }
+
+        optional ChargingStateEnumType chargingState = 2;
+        optional int32 timeSpentCharging = 3;
 
         enum ReasonEnumType {
             DeAuthorized = 0;
@@ -71,9 +76,6 @@ message TransactionEventRequest {
             UnlockCommand = 19;
         }
 
-        required int32 id = 1;
-        optional ChargingStateEnumType chargingState = 2;
-        optional int32 timeSpentCharging = 3;
         optional ReasonEnumType stoppedReason = 4;
         optional int32 remoteStartId = 5;
     }
@@ -98,7 +100,7 @@ message TransactionEventRequest {
 
         required string idToken = 1;
         required IdTokenEnumType type = 2;
-        required AdditionalInfoType additionalInfo = 3;
+        optional AdditionalInfoType additionalInfo = 3;
     }
 
     optional IdTokenType idToken = 10;

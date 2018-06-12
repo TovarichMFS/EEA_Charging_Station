@@ -1,5 +1,26 @@
 from enum import Enum
 
+class AuthorizationStatusEnumType(Enum):
+    Accepted = "Accepted"
+    Blocked = "Blocked"
+    ConcurrentTx = "ConcurrentTx"
+    Expired = "Expired"
+    Invalid = "Invalid"
+    NoCredit = "NoCredit"
+    NotAllowedTypeEVSE = "NotAllowedTypeEVSE"
+    NotAtThisLocation = "NotAtThisLocation"
+    NotAtThisTime = "NotAtThisTime"
+    Unknown = "Unknown"
+
+class CertificateStatusEnumType(Enum):
+    Accepted = "Accepted"
+    SignatureError = "SignatureError"
+    CertificateExpired = "CertificateExpired"
+    CertificateRevoked = "CertificateRevoked"
+    NoCertificateAvailable = "NoCertificateAvailable"
+    CertChainError = "CertChainError"
+    ContractCancelled = "ContractCancelled"
+
 class ChargingStateEnumType(Enum):
     Charging = "Charging"
     EVDetected = "EVDetected"
@@ -18,6 +39,11 @@ class EncodingMethodEnumType(Enum):
     DLMSMessage = "DLMS Message"
     COSEMProtectedData = "COSEM ProtectedData"
     EDL = "EDL"
+
+class HashAlgorithmEnumType(Enum):
+    SHA256 = "SHA256"
+    SHA384 = "SHA384"
+    SHA512 = "SHA512"
 
 class IdTokenEnumType(Enum):
     Central = "Central"
@@ -61,6 +87,12 @@ class MeasurandEnumType(Enum):
     PowerReactiveImport = "Power.Reactive.Import"
     SoC = "SoC"
     Voltage = "Voltage"
+
+class MessageFormatEnumType(Enum):
+    ASCII = "ASCII"
+    HTML = "HTML"
+    URI = "URI"
+    UTF8 = "UTF8"
 
 class PhaseEnumType(Enum):
     L1 = "L1"
