@@ -1,7 +1,6 @@
-import json
 from decimal import *
-from ocpp_datatypes import *
-from ocpp_datatypes_enum import *
+# from ocpp_datatypes import *
+# from ocpp_datatypes_enum import *
 from ocpp_datatype_parser import *
 import status_notification_pb2
 import authorize_pb2
@@ -132,7 +131,7 @@ def transactionEventResponse(
 ):
     response = transaction_event_pb2.TransactionEventResponse()
     if totalCost != None:
-        response.totalCost = totalCost
+        response.totalCost = str(totalCost)
 
     if chargingPriority != None:
         response.chargingPriority = chargingPriority

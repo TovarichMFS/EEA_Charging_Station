@@ -23,7 +23,7 @@ message AuthorizeRequest {
 
         required string idToken = 1;
         required IdTokenEnumType type = 2;
-        required AdditionalInfoType additionalInfo = 3;
+        optional AdditionalInfoType additionalInfo = 3;
     }
 
     required IdTokenType idToken = 2;
